@@ -6,6 +6,16 @@ layout: post
 
 # Cyber FastTrack Spring 2021 Writeups
 
+![](/assets/img/writeups/CyberFastTrackSpring2021/score.png)
+
+Writeups for the [Cyber FastTrack](https://cyber-fasttrack.org/) Spring 2021 Competition where I placed 28th out of 1,590 players.
+
+This was a good experience for me since I am used to competing with my university CTF team, [HuntsvilleTechSupport](https://ctftime.org/team/81423). Competing solo is a completely different feeling since I was no longer able to rely on my teammates in my weak areas. 
+
+Some challenges that I thought were particularly interesting were [WM03](#challenge-wm03) and [FM02](#challenge-fm02). WM03 was interesting because it was my first time solving a challenge concerning [Magic Hashes](https://www.whitehatsec.com/blog/magic-hashes/) in a CTF. And it was cool to analyze IRC traffic in FM02.
+
+Overall, enjoyed the competition and looking forward to see which scholarships I will qualify for!
+
 ## Categories
 * ### Binary 
     * #### [BE01](#challenge-be01)
@@ -558,7 +568,7 @@ Hm, so it looks like we're given `frame.png` which is a QR code and `code.png` w
 
 If you scan `frame.png`, you get the following text: `Hey, I've put the flag into the other file using the same trick we always use. You know what to do. :)`
 
-So, we know that flag is within `code.png`. One of the first things I noticed was that the border of `code.png` is black while the border of `frame.png`. This made me think of the bitwise operation XOR which evaluates to true when the number of true inputs is odd. So if we imagine that the color black = 0 and the color white = 1, then the output would be white (1). 
+So, we know that flag is within `code.png`. One of the first things I noticed was that the border of `code.png` is black while the border of `frame.png` is white. This made me think of the bitwise operation XOR which evaluates to true when the number of true inputs is odd. So if we imagine that the color black = 0 and the color white = 1, then the output would be white (1). 
 
 With that understanding, let's trying to XOR these images together! I used a tool called [StegSolve](https://github.com/zardus/ctf-tools/blob/master/stegsolve/install) to perform this operation for me. Opening up `code.png` in StegSolve, and then choosing `Analyse -> Image Combiner` shows the XOR of the two images:
 

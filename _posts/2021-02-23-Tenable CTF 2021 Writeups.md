@@ -6,6 +6,10 @@ layout: post
 
 # Tenable CTF 2021 Writeups
 
+## Team Placing: #33 / 1762
+
+This CTF is particularly special to me because it was the first time my team placed in the top 50 for any CTF, and a fairly large one at that. I found the [Cat Taps](#challenge-cat-taps) challenge particularly interesting because it was my first time truly analyzing USB traffic, so I learned a ton about how Human interface devices (HIDs) work over USB.
+
 ## Categories
 * ### Forensics
     * #### [Cat Taps](#challenge-cat-taps)
