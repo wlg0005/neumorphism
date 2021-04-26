@@ -1,0 +1,19 @@
+<style>
+  a {
+    color:#58a6ff;
+  }
+  a:hover {
+    color:#58a6ff;
+    text-decoration: underline;
+  }
+  li {
+    font-size: 16px;
+  }
+</style>
+
+<h1 id="about-me" class="title">{{site.writeups_title}}</h1>
+<ul>
+  {% for post in site.categories.Writeups %}
+  <li><span>{{post.date | date_to_string}}</span> &nbsp; <a href="{{post.url}}">{{post.title}}</a></li>
+  {% endfor %}
+</ul>

@@ -2,27 +2,97 @@
 
 @import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap");
+@import "syntax.css";
 
 /* Variables */
 
 $small-screen: 48em !default;
 $medium-screen: 62em !default;
 $large-screen: 75em !default;
-$font-family: "Raleway", sans-serif;
-$font-family-numbers: "Josefin Sans", sans-serif;
+$font-family: consolas;
+$font-family-numbers: consolas, sans-serif; // "Josefin Sans"
 $font-size-base: 1rem !default;
 $font-size-h1: 2rem !default;
 $font-weight-strong: 600;
 $text-color: #fff !default;
-$bg-color: rgba(43, 45, 47, 1);
+$bg-color: #0D1117;// rgba(43, 45, 47, 1);
 $card-bg-color: linear-gradient(
   145deg,
-  rgba(115, 115, 115, 0.15) 15%,
-  rgba(43, 45, 47, 1) 80%
+  #161B22 15%,
+  #0D1117 80%
 );
-$primary-color: #ff073a;
+$primary-color: white;
 
 /* General */
+
+.scroll-down {
+  position: absolute;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mouse {
+  width: 1.25rem;
+  height: 2.5rem;
+  border: 2px solid white;
+  border-radius: 2rem;
+  margin-bottom: .5rem;
+  display: flex;
+}
+
+.mouse span {
+  width: .625rem;
+  height: .625rem;
+  background-color: white;
+  display: block;
+  border-radius: 50%;
+  margin: auto;
+  animation: move-wheel 1.25s linear infinite;
+}
+
+.arrow span {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-right-color: white;
+  border-bottom-color: white;
+  transform: rotate(45deg);
+  animation: arrow-down .625s alternate infinite;
+}
+
+@keyframes move-wheel {
+  0% {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(1rem);
+  }
+}
+
+@keyframes arrow-down {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: .25;
+  }
+  50% {
+    opacity: .5;
+  }
+  75% {
+    opacity: .75;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 html {
   background: $bg-color;
@@ -31,11 +101,12 @@ html {
   font-size: $font-size-base;
   font-weight: normal;
   height: 100%;
-  overflow: hidden;
+  /* overflow: hidden;*/
+  scroll-behavior: smooth;
 }
 
 body {
-  height: 100%;
+   height: 100%; 
 }
 
 /* Typography */
@@ -61,7 +132,7 @@ a {
 
 .highlight-title {
   color: $primary-color;
-  text-shadow: 0.25rem 0.25rem 0.25rem $primary-color;
+  text-shadow: 0.5rem 0.5rem 0.5rem black;
 }
 
 .highlight-link {
@@ -133,7 +204,7 @@ a {
 }
 
 .neumorphism-card-big {
-  box-shadow: 5px 5px 4px #161718, -5px -5px 4px #404346;
+  /* box-shadow: 5px 5px 4px #161718, -5px -5px 4px #404346; */
 }
 
 /* Preloader */
