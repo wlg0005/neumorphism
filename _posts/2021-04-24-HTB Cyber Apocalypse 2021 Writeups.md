@@ -12,7 +12,7 @@ This was honestly one of my favorite CTFs for the Spring semester despite playin
 
 ## Categories
 * ### Forensics
-    * #### [Oldest trick in the book](#challenges-oldest-trick-in-the-book)
+    * #### [Oldest trick in the book](#challenge-oldest-trick-in-the-book)
     * More writeups soon!
 
 -------------------------------------------------------------------------------
