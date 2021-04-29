@@ -8,7 +8,7 @@ layout: post
 
 ## Team Placing: 210 / 2735
 
-This was honestly one of my favorite CTFs for the Spring semester despite playing solo for most of the week (finals were upcoming). The forensics challenges were a ton of fun and very interesting to me, and I also enjoyed a lot of the web exploitation challenges.
+This was honestly one of my favorite CTFs for the Spring semester despite playing solo for most of the week (finals were coming up). The forensics challenges were a ton of fun and very interesting to me, and I also enjoyed a lot of the web exploitation challenges.
 
 ## Categories
 * ### Forensics
@@ -22,17 +22,17 @@ This was honestly one of my favorite CTFs for the Spring semester despite playin
 
 ## Description:
 
-![](Oldest%20trick%20in%20the%20book%20Writeup.001.png)
+![](/assets/img/writeups/HTBCyberApocalypse2021/Oldest%20trick%20in%20the%20book%20Writeup.001.png)
 
 ## Walkthrough:
 
 Opening up the provided pcap file, named `older_trick.pcap`, we're presented with what seems like fairly normal TCP traffic:
 
-![](Oldest%20trick%20in%20the%20book%20Writeup.002.png)
+![](/assets/img/writeups/HTBCyberApocalypse2021/Oldest%20trick%20in%20the%20book%20Writeup.002.png)
 
 Nothing is particularly out of the ordinary, and most of it is TLS encrypted. However, if we continue scrolling through the traffic we notice that there seems to be quite a lot of `ICMP` ping packets:
 
-![](Oldest%20trick%20in%20the%20book%20Writeup.003.png)
+![](/assets/img/writeups/HTBCyberApocalypse2021/Oldest%20trick%20in%20the%20book%20Writeup.003.png)
 
 Interesting.. These ping reply and request packets make up over 50% of the entire packet capture, which is definitely suspicious.
 
@@ -40,7 +40,7 @@ It is fairly common for attackers to use protocols like ICMP for [C2 communicati
 
 With that in mind, let's use the `icmp` filter to look at only ICMP traffic and let's take a look at the first ping request packet:
 
-![](Oldest%20trick%20in%20the%20book%20Writeup.004.png)
+![](/assets/img/writeups/HTBCyberApocalypse2021/Oldest%20trick%20in%20the%20book%20Writeup.004.png)
 
 One of the first things I noticed was the `PK` in the data field. `PK` is the file signature for a ZIP file so it is very strange that it is appearing in an ICMP packet. If you continue analyzing the other ping request packets, you will find other interesting strings such as `addons.json` and `storage.sqlite` which are most likely some of the files within this ZIP file.
 
@@ -50,7 +50,7 @@ Since the reply packets contain the same data as the request packets, I first fi
 
 Then I applied the `Data` section of the packet as a column which gave me something that looked like this:
 
-![](Oldest%20trick%20in%20the%20book%20Writeup.005.png)
+![](/assets/img/writeups/HTBCyberApocalypse2021/Oldest%20trick%20in%20the%20book%20Writeup.005.png)
 
 Finally, I exported the packets as a CSV by going to `File -> Export Packet Dissections -> As CSV...` This created a CSV file named `data.csv` which contained the `Data` section as a column in hex.
 
@@ -88,7 +88,7 @@ sus.zip: Zip archive data, at least v2.0 to extract
 
 Awesome, let's unzip the file and take a look at what we get:
 
-![](Oldest%20trick%20in%20the%20book%20Writeup.006.png)
+![](/assets/img/writeups/HTBCyberApocalypse2021/Oldest%20trick%20in%20the%20book%20Writeup.006.png)
 
 Interesting, this looks like a Mozilla Firefox user profile which we can tell by the `MOZLZ4` extension in some of the files as well as just by googling some of the file names.
 
