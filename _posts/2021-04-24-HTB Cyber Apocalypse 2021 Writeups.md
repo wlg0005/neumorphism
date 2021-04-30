@@ -40,7 +40,7 @@ With this in mind, we can click "Enable Editing" since this will not actually ex
 
 Looks like there's an `Auto_Open` macro. Very suspicious. Let's take a look at the code by clicking `Edit`:
 
-```vbscript
+```powershell
 Sub Auto_Open()
 Dim bomazpcuwhstlcd As String
 Dim dbcsmjrdsqm As String
