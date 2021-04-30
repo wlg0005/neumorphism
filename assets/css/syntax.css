@@ -1,4 +1,4 @@
-.highlight pre { background-color: #161B22; margin: 1em 0; padding: 1em; border-radius: 6px; overflow: auto;}
+.highlight pre { background-color: #161B22; margin: 1em 0; padding: 1em; border-radius: 6px; overflow: auto; font-size:1rem;}
 @media screen and (max-width: 600px) {
     .highlight pre {
         font-size: 85%;
