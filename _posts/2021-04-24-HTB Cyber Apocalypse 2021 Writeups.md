@@ -160,6 +160,9 @@ Ok, so we know that there seems to be Powershell commands that are both hex enco
 After exporting the macro script, this is the script that I came up with for the first stage of deobfuscation:
 
 ```python
+from base64 import b64decode
+import re
+
 hex_strings = [] # list to store the hex strings from each line
 
 # open the macro script code
