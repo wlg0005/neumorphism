@@ -380,7 +380,7 @@ iex ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($
 
 Awesome! This was one of my favorite challenges during the entire competition. I really enjoyed deobfuscating the malicious macro and figuring out what was going on. If these kind of challenges interest you as well, I would highly recommend checking out [John Hammond's](https://www.youtube.com/channel/UCVeW9qkBjo3zosnqUbG7CFw) Malware Analysis videos, such as [this one](https://youtu.be/mhOWdH2zwMk).
 
- ### Flag: CHTB{maldocs_are_the_new_meta}
+### Flag: CHTB{maldocs_are_the_new_meta}
 
 -------------------------------------------------------------------------------
 
