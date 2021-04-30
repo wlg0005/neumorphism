@@ -182,6 +182,7 @@ with open('ThisDocument.cls', 'r') as f:
 
 # concatentate any lists in hex_strings
 hex_strings = ["".join(x) for x in hex_strings]
+
 # convert them from hex to bytes
 hex_strings = [bytes.fromhex(x).decode() for x in hex_strings]
 
