@@ -20,7 +20,7 @@ This was honestly one of my favorite CTFs for the Spring semester despite playin
 * ### Web
     * #### [MiniSTRyplace](#challenge-ministryplace)
     * #### [cURL as a Service (CaaS)](#challenge-curl-as-a-service-caas)
-    * #### [Wild Goose Hunt](#challenge-wild-goost-hunt)
+    * #### [Wild Goose Hunt](#challenge-wild-goose-hunt)
     * #### [gcloud pwn](#challenge-gcloud-pwn) 
     * More writeups soon!
 
@@ -883,7 +883,7 @@ If we supply a URL such as `https://google.com` the page returns a PDF of the pr
 
 Based off the name of the challenge I had a hunch that this was going to be a Google Cloud server side request forgery (SSRF) vulnerability similar to challenges I've seen in the past, such as [Watermark as a Service](https://github.com/tlyrs7314/ctf-writeups/tree/main/DiceCTF2021/Watermark-as-a-Service).
 
-The basic idea is that because this web application is hosted on Google Cloud services and serving us pages that it itself navigates to, we can potentially access the Google Cloud metadata API and thus access other goodies such as authorization tokens.
+The basic idea is that because this web application is hosted on Google Cloud services and serving us pages that it itself navigates to, we can potentially access the internal Google Cloud metadata API and thus access other goodies such as authorization tokens.
 
 This vulnerability has been found in online services such as [Shopify](https://hackerone.com/reports/341876) and [Vimeo](https://hackerone.com/reports/549882), so this is definitely one of the more real world challenges.
 
