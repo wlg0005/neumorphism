@@ -8,7 +8,7 @@ layout: post
 
 ## Team Placing: 210 / 2735
 
-This was honestly one of my favorite CTFs for the Spring semester despite playing solo for most of the week (finals were coming up). The forensics challenges were a ton of fun and very interesting to me, and I also enjoyed a lot of the web exploitation challenges. Some of my favorite challenges were [Invitation](#challenge-invitation) which involved deobfuscating a malicious macro in a Word document, and [gcloud pwn](#challenge-gcloud-pwn) which involved exploiting a server side request forgery (SSRF) vulnerability in a web application hosted on Google Cloud services.
+This was one of my favorite CTFs for the Spring semester despite playing solo for most of the week (finals were coming up). The forensics challenges were a ton of fun and very interesting and I also enjoyed a lot of the web exploitation challenges. Some of my favorite challenges were [Invitation](#challenge-invitation) which involved deobfuscating a malicious macro in a Word document, and [gcloud pwn](#challenge-gcloud-pwn) which involved exploiting a server side request forgery (SSRF) vulnerability in a web application hosted on Google Cloud services.
 
 ![](/assets/img/writeups/HTBCyberApocalypse2021/HTB%20Cyber%20Apocalypse%20Certificate.jpg)
 
