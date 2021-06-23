@@ -155,7 +155,7 @@ Interesting.. the output looks like Base64, so let's try Base64 decoding it now:
 
 Oh nice, we got some readable text! This looks like a common beginning of a malicious Powershell script. The `$Pshome` variable in Powershell contains the installation path of Powershell on Windows machines and when indexed as shown above, it can be used to obfsucate the `IEX`, or [Invoke-Expression](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-expression?view=powershell-7.1), cmdlet. We can verify this by running the code in a Powershell terminal:
 
-```powershell
+```bash
 PS > $Pshome[4] + $Pshome[30] + 'x'
 iex
 ```
