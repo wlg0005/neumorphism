@@ -12,7 +12,7 @@ This was my first time ever competing in a DEF CON CTF so it was definitely a le
 
 The following writeup is a walkthrough of a challenge that involved a little bit of everything, from performing reconaissance with nmap, to connecting to a Napster server, to analyzing the binary that is controlling a bot user, and finally identifiying and exploiting a vulnerability in that binary to successfully download any file on the user's system. 
 
-### Solvers: This challenge was a collaborative effort between myself and my teammate, [Dayton Hasty (dayt0n)](https://github.com/dayt0n)
+### Solvers: This challenge and writeup was a collaborative effort between myself and my teammate, [Dayton Hasty (dayt0n)](https://github.com/dayt0n)
 ### Challenge: nooopster
 ### Category: PWN, RE 
 
