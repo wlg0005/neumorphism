@@ -12,7 +12,7 @@ This was a Web-only CTF that had some really cool challenges. I wasn't able to p
 
 The following writeup is a walkthrough a challenge which involved bypassing the Content Security Policy (CSP) on a website via CSP policy injection, allowing for a Cross-Site-Scripting (XSS) attack, and ultimately the stealing of the cookies of an Admin Bot.
 
-### Solvers: This challenge was a collaborative effort between myself and my teammate [Dayton (dayt0n)](https://github.com/dayt0n)
+### Solvers: This challenge was a collaborative effort between myself and my teammate, [Dayton Hasty (dayt0n)](https://github.com/dayt0n)
 ### Challenge: CSP1
 ### Category: Web 
 
