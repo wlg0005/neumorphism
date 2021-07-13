@@ -10,7 +10,7 @@ layout: post
 
 This was a Web-only CTF that had some really cool challenges. I wasn't able to play as much as I wanted to, but I did get to struggle with a few challenges and learned a ton from the writeups!
 
-The following writeup is a walkthrough a challenge which involved bypassing the Content Security Policy (CSP) on a website via CSP policy injection, allowing for a Cross-Site-Scripting (XSS) attack, and ultimately the stealing of the cookies of an Admin Bot.
+The following writeup is a walkthrough of a challenge which involved bypassing the Content Security Policy (CSP) on a website via CSP policy injection, allowing for a Cross-Site-Scripting (XSS) attack, and ultimately the stealing of the cookies of an Admin Bot.
 
 ### Solvers: This challenge was a collaborative effort between myself and my teammate, [Dayton Hasty (dayt0n)](https://github.com/dayt0n)
 ### Challenge: CSP1
@@ -94,4 +94,4 @@ Let's send the final exploit to the Admin Bot, and inspect the RequestBin:
 
 And there's the flag! Pretty cool challenge that highlighted one of the easier ways to get around CSP.
 
-### Flag: we{2bf90f00-f560-4aee-a402-d46490b53541@just_L1k3_<sq1_injEcti0n>}
+### Flag: we{2bf90f00-f560-4aee-a402-d46490b53541@just_L1k3_\<sq1_injEcti0n\>}
