@@ -6,7 +6,7 @@ layout: post
 
 # HackTheBox Cyber Apocalypse 2021 Writeups
 
-## Team Placing: 210 / 4740
+## Team Placing: #210 / 4740
 
 ![](/assets/img/writeups/HTBCyberApocalypse2021/HTB%20Cyber%20Apocalypse%20Certificate.jpg)
 

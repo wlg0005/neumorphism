@@ -6,148 +6,15 @@ layout: post
 
 # DamCTF 2021 Writeups
 
-## Team Placing: 97 / 827
+## Team Placing: #97 / 827
 
 ## Categories
-* ### Rev
-    * #### [seed](#challenge-seed)
 * ### Malware
     * #### [sneaky-script](#challenge-sneaky-script-first-blood-)
+* ### Rev
+    * #### [seed](#challenge-seed)
 * ### Crypto
     * #### [xorpals](#challenge-xorpals)
-
--------------------------------------------------------------------------------
-
-### Challenge: seed
-### Category: Rev
-
-## Description:
-
-#### Having a non-weak seed when generating "random" numbers is super important! Can you figure out what is wrong with this PRNG implementation?
-
-#### seed.py is the Python script used to generate the flag for this challenge. log.txt is the output from the script when the flag was generated.
-
-#### What is the flag?
-
-## Walkthrough:
-
-We're provided two files, `seed.py` and `log.txt`. `seed.py` contains the code used to generate the flag, so let's take a look at it first. I have added comments to the original code to help with readability:
-
-```python
-import sys
-import time
-import random
-import hashlib
-
-# function to generate our "random" seed
-def seed():
-    return round(time.time())
-
-# function that returns the sha256 hash of the provided text in hex
-def hash(text):
-    return hashlib.sha256(str(text).encode()).hexdigest()
-
-def main():
-
-    while True:
-        s = seed() # generate our "random" seed
-        random.seed(s, version=2) # set the seed value
-
-        # generate the next random floating pointer number in the range of 0.0 - 1.0
-        # based off our provided seed.
-        x = random.random()
-        flag = hash(x) # hash the random number using the function above
-
-        # if b9ff3ebf is in the flag hash
-        if 'b9ff3ebf' in flag:
-            # we found the correct hash, and solved the chall
-            with open("./flag", "w") as f:
-                f.write(f"dam{{{flag}}}")
-            f.close()
-            break
-
-        # otherwise our hash is incorrect
-        print(f"Incorrect: {x}")
-    print("Good job <3")
-
-if __name__ == "__main__":
-   sys.exit(main())
-```
-
-To summarize the code above, `seed.py` generates the flag by continually generating sha256 hashes in hex of a "random" value until the hash generated contains `b9ff3ebf` in the string, in which case we have found the flag.
-
-We can also take a look at `log.txt` to see what happened when the author ran the script:
-
-```
-Incorrect: 0.3322089622063289
-Incorrect: 0.10859805708337256
-Incorrect: 0.39751456956943265
-Incorrect: 0.6194981263678604
-Incorrect: 0.32054505821893853
-Incorrect: 0.2674908181379442
-Incorrect: 0.5379388350878211
-Incorrect: 0.7799698997586163
-Incorrect: 0.6893538761284775
-Incorrect: 0.7171513961367021
-Incorrect: 0.29362186264112344
-Incorrect: 0.06571100672753238
-Incorrect: 0.9607588522085679
-Incorrect: 0.33534977507836194
-Incorrect: 0.07384192274198853
-Incorrect: 0.1448081453121044
-Good job <3
-```
-
-As you may have already noticed, the issue with the code is within the `seed` function:
-
-```python
-def seed():
-    return round(time.time())
-```
-
-Because the seed is simply based on time and rounded to the nearest integer, we can rather easily brute force the value that was used when the author ran the script. 
-
-This is the script I used to solve the challenge during the competition:
-
-```python
-import time
-import random
-import hashlib
-
-# hash function from seed.py
-def hash(text):
-    return hashlib.sha256(str(text).encode()).hexdigest()
-
-# starting value generated using an epoch calculator
-# roughly one month before the competition
-s = 1633046400
-while True:
-
-    random.seed(s, version=2) # generate our seed like seed.py
-
-    # test the first 17 values (based off log.txt)
-    for i in range(17):
-        # generate our flag hash like in seed.py
-        x = random.random()
-        flag = hash(x)
-
-        # same check as in seed.py
-        if 'b9ff3ebf' in flag:
-            print(f"dam{{{flag}}}")
-            break
-
-    # stop if we go above our current time
-    if s > round(time.time()):
-        print('too big')
-        break
-
-    # increment our starting value
-    s += 1
-```
-
-Running the script, I eventually got the flag after a couple minutes. However, a better approach to this problem which I did not think of during the competition would be to simply decrement our current time until we eventually find the correct seed value. This would prevent us from accidentally choosing a starting value that is too large.
-
-### Flag: dam{f6f73f022249b67e0ff840c8635d95812bbb5437170464863eda8ba2b9ff3ebf}
 
 -------------------------------------------------------------------------------
 
@@ -377,6 +244,139 @@ Let's copy the data and then paste it in [CyberChef](https://gchq.github.io/Cybe
 ![](/assets/img/writeups/DamCTF2021/sneaky-script%20Writeup.003.png)
 
 ### Flag: dam{oh_n0_a1l_muh_k3y5_are_g0n3}
+
+-------------------------------------------------------------------------------
+
+### Challenge: seed
+### Category: Rev
+
+## Description:
+
+#### Having a non-weak seed when generating "random" numbers is super important! Can you figure out what is wrong with this PRNG implementation?
+
+#### seed.py is the Python script used to generate the flag for this challenge. log.txt is the output from the script when the flag was generated.
+
+#### What is the flag?
+
+## Walkthrough:
+
+We're provided two files, `seed.py` and `log.txt`. `seed.py` contains the code used to generate the flag, so let's take a look at it first. I have added comments to the original code to help with readability:
+
+```python
+import sys
+import time
+import random
+import hashlib
+
+# function to generate our "random" seed
+def seed():
+    return round(time.time())
+
+# function that returns the sha256 hash of the provided text in hex
+def hash(text):
+    return hashlib.sha256(str(text).encode()).hexdigest()
+
+def main():
+
+    while True:
+        s = seed() # generate our "random" seed
+        random.seed(s, version=2) # set the seed value
+
+        # generate the next random floating pointer number in the range of 0.0 - 1.0
+        # based off our provided seed.
+        x = random.random()
+        flag = hash(x) # hash the random number using the function above
+
+        # if b9ff3ebf is in the flag hash
+        if 'b9ff3ebf' in flag:
+            # we found the correct hash, and solved the chall
+            with open("./flag", "w") as f:
+                f.write(f"dam{{{flag}}}")
+            f.close()
+            break
+
+        # otherwise our hash is incorrect
+        print(f"Incorrect: {x}")
+    print("Good job <3")
+
+if __name__ == "__main__":
+   sys.exit(main())
+```
+
+To summarize the code above, `seed.py` generates the flag by continually generating sha256 hashes in hex of a "random" value until the hash generated contains `b9ff3ebf` in the string, in which case we have found the flag.
+
+We can also take a look at `log.txt` to see what happened when the author ran the script:
+
+```
+Incorrect: 0.3322089622063289
+Incorrect: 0.10859805708337256
+Incorrect: 0.39751456956943265
+Incorrect: 0.6194981263678604
+Incorrect: 0.32054505821893853
+Incorrect: 0.2674908181379442
+Incorrect: 0.5379388350878211
+Incorrect: 0.7799698997586163
+Incorrect: 0.6893538761284775
+Incorrect: 0.7171513961367021
+Incorrect: 0.29362186264112344
+Incorrect: 0.06571100672753238
+Incorrect: 0.9607588522085679
+Incorrect: 0.33534977507836194
+Incorrect: 0.07384192274198853
+Incorrect: 0.1448081453121044
+Good job <3
+```
+
+As you may have already noticed, the issue with the code is within the `seed` function:
+
+```python
+def seed():
+    return round(time.time())
+```
+
+Because the seed is simply based on time and rounded to the nearest integer, we can rather easily brute force the value that was used when the author ran the script. 
+
+This is the script I used to solve the challenge during the competition:
+
+```python
+import time
+import random
+import hashlib
+
+# hash function from seed.py
+def hash(text):
+    return hashlib.sha256(str(text).encode()).hexdigest()
+
+# starting value generated using an epoch calculator
+# roughly one month before the competition
+s = 1633046400
+while True:
+
+    random.seed(s, version=2) # generate our seed like seed.py
+
+    # test the first 17 values (based off log.txt)
+    for i in range(17):
+        # generate our flag hash like in seed.py
+        x = random.random()
+        flag = hash(x)
+
+        # same check as in seed.py
+        if 'b9ff3ebf' in flag:
+            print(f"dam{{{flag}}}")
+            break
+
+    # stop if we go above our current time
+    if s > round(time.time()):
+        print('too big')
+        break
+
+    # increment our starting value
+    s += 1
+```
+
+Running the script, I eventually got the flag after a couple minutes. However, a better approach to this problem which I did not think of during the competition would be to simply decrement our current time until we eventually find the correct seed value. This would prevent us from accidentally choosing a starting value that is too large.
+
+### Flag: dam{f6f73f022249b67e0ff840c8635d95812bbb5437170464863eda8ba2b9ff3ebf}
 
 -------------------------------------------------------------------------------
 
