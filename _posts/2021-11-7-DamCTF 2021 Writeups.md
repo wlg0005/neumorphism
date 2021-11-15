@@ -374,7 +374,7 @@ while True:
     s += 1
 ```
 
-Running the script, I eventually got the flag after a couple minutes. However, a better approach to this problem which I did not think of during the competition would be to simply decrement our current time until we eventually find the correct seed value. This would prevent us from accidentally choosing a starting value that is too large.
+Running the script, I eventually got the flag after a couple minutes. However, a better approach to this problem which I did not think of during the competition would be to simply decrement our current time until we eventually find the correct seed value. This would prevent us from accidentally choosing a starting value that is too large or too small.
 
 ### Flag: dam{f6f73f022249b67e0ff840c8635d95812bbb5437170464863eda8ba2b9ff3ebf}
 
@@ -409,7 +409,7 @@ Opening the provided `flags.txt` file, we're presented with the following:
 
 So we're given 99 hex strings of length 60, and we need to figure out which one is the flag and also the key for that was used to XOR encrypt it.
 
-We can simply create a script that will try all 256 possible xor keys on hex string and we will eventually find the flag.
+We can simply create a script that will try all 256 possible XOR keys on each hex string and we will eventually find the flag.
 
 This is the script I created to solve this challenge:
 
