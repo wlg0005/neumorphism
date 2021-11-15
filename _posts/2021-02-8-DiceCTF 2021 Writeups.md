@@ -8,8 +8,6 @@ layout: post
 
 ## Team Placing: #202 / 1059
 
-Despite not placing as high as we wanted to for this CTF, there were some very interesting challenges such as [Watermark as a Service](https://github.com/tlyrs7314/ctf-writeups/tree/main/DiceCTF2021/Watermark-as-a-Service) where we got to learn a ton about the potential for SSRF vulnerabilities in cloud services such as Google Cloud.
-
 ### Challenge: Missing Flavortext
 ### Category: Web
 

@@ -8,13 +8,7 @@ layout: post
 
 ![](/assets/img/writeups/CyberFastTrackSpring2021/score.png)
 
-Writeups for the [Cyber FastTrack](https://cyber-fasttrack.org/) Spring 2021 Competition where I placed 28th out of 1,590 players.
-
-This was a good experience for me since I am used to competing with my university CTF team, [HuntsvilleTechSupport](https://ctftime.org/team/81423). Competing solo is a completely different feeling since I was no longer able to rely on my teammates in my weak areas. 
-
-Some challenges that I thought were particularly interesting were [WM03](#challenge-wm03) and [FM02](#challenge-fm02). WM03 was interesting because it was my first time solving a challenge concerning [Magic Hashes](https://www.whitehatsec.com/blog/magic-hashes/) in a CTF and it was cool to analyze IRC traffic in FM02.
-
-Overall, enjoyed the competition and looking forward to seeing which scholarships I will qualify for!
+Writeups for the [Cyber FastTrack](https://cyber-fasttrack.org/) Spring 2021 Competition where I placed 28th out of 1,590 players and received a $1,000 scholarship.
 
 ## Categories
 * ### Binary 

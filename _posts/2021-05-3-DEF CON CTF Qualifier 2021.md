@@ -8,10 +8,6 @@ layout: post
 
 ## Team Placing: #93 / 433
 
-This was my first time ever competing in a DEF CON CTF so it was definitely a learning experience. Nearly all of the challenges were PWN (binary exploitation) challenges, which is definitely one of my weak points. Despite this, my teammate, Dayton, and I were able to solve one of the challenges and learned a ton from the writeups after the competition.
-
-The following writeup is a walkthrough of a challenge that involved a little bit of everything, from performing reconaissance with nmap, to connecting to a Napster server, to analyzing the binary that is controlling a bot user, and finally identifiying and exploiting a vulnerability in that binary to successfully download any file on the user's system. 
-
 ### Solvers: This challenge and writeup was a collaborative effort between myself and my teammate, [Dayton Hasty (dayt0n)](https://github.com/dayt0n)
 ### Challenge: nooopster
 ### Category: PWN, RE 
