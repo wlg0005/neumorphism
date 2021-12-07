@@ -262,6 +262,7 @@ Let's copy the data and then paste it in [CyberChef](https://gchq.github.io/Cybe
 
 We're provided two files, `seed.py` and `log.txt`. `seed.py` contains the code used to generate the flag, so let's take a look at it first. I have added comments to the original code to help with readability:
 
+{% raw %}
 ```python
 import sys
 import time
@@ -302,6 +303,7 @@ def main():
 if __name__ == "__main__":
    sys.exit(main())
 ```
+{% endraw %}
 
 To summarize the code above, `seed.py` generates the flag by continually generating sha256 hashes in hex of a "random" value until the hash generated contains `b9ff3ebf` in the string, in which case we have found the flag.
 
@@ -338,6 +340,7 @@ Because the seed is simply based on time and rounded to the nearest integer, we 
 
 This is the script I used to solve the challenge during the competition:
 
+{% raw %}
 ```python
 import time
 import random
@@ -373,6 +376,7 @@ while True:
     # increment our starting value
     s += 1
 ```
+{% endraw %}
 
 Running the script, I eventually got the flag after a couple minutes. However, a better approach to this problem which I did not think of during the competition would be to simply decrement our current time until we eventually find the correct seed value. This would prevent us from accidentally choosing a starting value that is too large or too small.
 
