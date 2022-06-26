@@ -23,7 +23,7 @@ username: Will Green
 # > set this to your job title, e.g. Fullstack Developer
 typing_text: aka Ducky 
 # email: Your E-Mail address for the email button.
-email: wlg0005@uah.edu
+email: will@willgreen.tech
 # For every social button you want to display, set your username or userid
 # If you do not use one of the following websites, then leave it empty
 # > twitter_username:
@@ -41,7 +41,7 @@ show_aboutme_card: true
 # about_me_title: The will be displayed as the title in the About Me section
 about_me_title: /About Me/
 # about_me_description: This will be displayed under the title.
-about_me_description: <p style="font-size:18px">Hi, I'm <strong style="color:#B4DA82">Will</strong>! I am a 3rd-Year <strong style="color:#ED6C89">Cybersecurity Engineering</strong> major at the <strong style="color:#009FDF">University of Alabama in Huntsville</strong> with a strong interest in <strong style="color:#A89FEC">digital forensics and incident response (DFIR)</strong>, <strong style="color:#F9D878">security operations</strong>, and <strong style="color:#EF9C70">security engineering</strong>.<br><br> In my free time I enjoy competing in CTFs with <a href="https://ctftime.org/team/81423">HuntsvilleTechSupport</a>, reading about the latest cybersecurity news, and playing strategy games.</p>
+about_me_description: <p style="font-size:18px">Hi, I'm <strong style="color:#B4DA82">Will</strong>! I am a <strong style="color:#ED6C89">Applied Cybersecurity</strong> major at the <strong style="color:#941b07">SANS Technology Institute</strong> with a strong interest in <strong style="color:#A89FEC">digital forensics and incident response (DFIR)</strong>, <strong style="color:#F9D878">security operations</strong>, and <strong style="color:#EF9C70">security engineering</strong>.<br><br> In my free time I enjoy competing in CTFs with <a href="https://ctftime.org/team/81423">HuntsvilleTechSupport</a>, going to concerts, and playing strategy games.</p>
 
 # WRITEUPS SECTION
 show_writeups_card: true
