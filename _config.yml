@@ -2,7 +2,7 @@
 
 # GENERAL SITE SETTINGS
 # title: This will be displayed as the website's name in your browser tab.
-title: Will Green 
+title: Will Green | Applied Cybersecurity Student
 # description: This will be meta HTML tag content. This can be ignored.
 description: Will Green | Applied Cybersecurity Student
 # baseurl: The subpath of your site
@@ -21,7 +21,7 @@ kramdown:
 username: Will Green 
 # typing_text: This will be typed before 'scroll down for more'.
 # > set this to your job title, e.g. Fullstack Developer
-typing_text: aka Ducky 
+typing_text: aka ducky 
 # email: Your E-Mail address for the email button.
 email: will@willgreen.tech
 # For every social button you want to display, set your username or userid
