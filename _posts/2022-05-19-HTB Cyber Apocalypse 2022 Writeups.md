@@ -13,7 +13,6 @@ layout: post
 ## Categories
 * ### Forensics
     * #### [Golden Persistence](#challenge-golden-persistence)
-    * #### More writeups soon...
 
 -------------------------------------------------------------------------------
 
