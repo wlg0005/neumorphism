@@ -105,7 +105,7 @@ I have added comments to explain the code but I will explain the SQL query:
 1 and 1=(CASE WHEN (SELECT SUBSTR(name,{position},1) FROM sqlite_master WHERE type='table' and name NOT like 'sqlite_%')='{l}' THEN 1 ELSE 2 END)"
 ```
 
-We begin the query like I've explained above `1 and 1=` and then a CASE statement. The conditional for the CASE statement is where the bruteforcing is occuring:
+We begin the query like I've explained above `1 and 1=` and then a CASE statement. The conditional for the CASE statement is where the bruteforcing is occurring:
 
 ```sql
 SELECT SUBSTR(name,{position},1) FROM sqlite_master WHERE type='table' and name NOT like 'sqlite_%'='{l}'
