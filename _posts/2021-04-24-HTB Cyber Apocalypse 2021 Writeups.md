@@ -36,9 +36,9 @@ Opening up the provided .docm file, named `invite.docm`, we're presented with a 
 
 ![](/assets/img/writeups/HTBCyberApocalypse2021/Invitation%20Writeup.002.png)
 
-Because of the `.docm` extension we know that this document contains embedded macros, which are often used by attackers to [execute malicious code](https://attack.mitre.org/techniques/T1137/001/). And it appears that the document is trying to [social engineer](https://attack.mitre.org/techniques/T1204/002/) the user into clicking the "Enable Editing" and "Enable Content" which would allow the macros to execute.
+Because of the `.docm` extension we know that this document contains embedded macros, which are often used by attackers to [execute malicious code](https://attack.mitre.org/techniques/T1137/001/). And it appears that the document is trying to [social engineer](https://attack.mitre.org/techniques/T1204/002/) the user into clicking the "Enable Editing" and "Enable Content" buttons which would allow the macros to execute.
 
-With this in mind, we can click "Enable Editing" since this will not actually execute the macros, and then check out what macros exist:
+With this in mind, we can click "Enable Editing" since this will not actually execute the macros, and then check out which macros exist:
 
 ![](/assets/img/writeups/HTBCyberApocalypse2021/Invitation%20Writeup.003.png)
 
@@ -162,6 +162,20 @@ Invoke-Expression takes a string as input and evaluates/runs it, which means tha
 Ok, so we know that there seems to be Powershell commands that are both hex encoded and base64 encoded. Taking a closer look, we can tell that this is actually one large hex string based off the `& _` (concatentation) at the end of each line. 
 
 After exporting the macro script, this is the script that I came up with for the first stage of deobfuscation:
+
+***Wooooooooosh** Future Will here (09/08/2023). There is a much simpler way to deobfuscate this. Just use CyberChef:*
+![](/assets/img/writeups/HTBCyberApocalypse2021/Invitation%20Writeup.000.png)
+
+*Note: The full CyberChef recipe could not be shown. Here is the recipe in Chef format that you can import:*
+```
+Regular_expression('User defined','"(.*?)"',true,true,false,false,false,false,'List matches')
+Find_/_Replace({'option':'Regex','string':'"'},'',true,false,true,false)
+Find_/_Replace({'option':'Regex','string':'\\n'},'',true,false,true,false)
+From_Hex('Auto')
+From_Base64('A-Za-z0-9+/=',true,false)
+Decode_text('UTF-16LE (1200)')
+```
+*Now returning to the original writeup...*
 
 ```python
 from base64 import b64decode

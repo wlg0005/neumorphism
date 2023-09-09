@@ -4,7 +4,7 @@ categories: [Writeups]
 layout: post 
 ---
 
-# HTB Cyber Apoclypse CTF 2022 Writeups
+# HTB Cyber Apocalypse CTF 2022 Writeups
 
 ## Team Placing: #99 / 7024
 
