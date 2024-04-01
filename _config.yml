@@ -2,9 +2,9 @@
 
 # GENERAL SITE SETTINGS
 # title: This will be displayed as the website's name in your browser tab.
-title: Will Green | Applied Cybersecurity Student
+title: Will Green | Cyber Security Analyst
 # description: This will be meta HTML tag content. This can be ignored.
-description: Will Green | Applied Cybersecurity Student
+description: Will Green | Cyber Security Analyst
 # baseurl: The subpath of your site
 # > set this to "", if you renamed the repository to <user>.github.io
 baseurl: ""
